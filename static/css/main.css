@@ -123,4 +123,10 @@ select {
 .custom-book__header {
     display: flex;
     justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.upload-file__container {
+    width: 80%;
+    margin: 0 auto;
 }

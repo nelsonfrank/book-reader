@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- uppy dnd -->
+    <link rel="stylesheet" href="https://releases.transloadit.com/uppy/v3.0.1/uppy.min.css">
+    <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&display=swap"
@@ -19,6 +22,44 @@
     </div>
     {% block body %}{% endblock %}
 
+    <!-- Load Uppy JS bundle. -->
+    <script src="https://releases.transloadit.com/uppy/v3.0.1/uppy.min.js" type="module"></script>
+    <script src="https://releases.transloadit.com/uppy/v3.0.1/uppy.legacy.min.js" nomodule></script>
+    <script src="https://releases.transloadit.com/uppy/locales/v3.0.0/ru_RU.min.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            'use strict';
+            var uppy = new Uppy.Uppy({
+                debug: true,
+                autoProceed: true,
+                locale: Uppy.locales.en_US
+            });
+            uppy.use(Uppy.DragDrop, {
+                target: '.UppyDragDrop',
+                // We are using the ru_RU locale pack (set above in Uppy class options),
+                // but you can also override specific strings like so:
+                locale: {
+                    strings: {
+                        browse: 'Choose file'
+                    }
+                }
+            });
+            uppy.use(Uppy.ProgressBar, {
+                target: '.for-ProgressBar',
+                hideAfterFinish: false
+            });
+            uppy.use(Uppy.Tus, { endpoint: 'https://tusd.tusdemo.net/files/' });
+            uppy.on('upload-success', function (file, response) {
+                var url = response.uploadURL
+                var fileName = file.name
+
+                document.querySelector('.uploaded-files ol').innerHTML +=
+                    '<li><a href="' + url + '" target="_blank">' + fileName + '</a></li>'
+            });
+
+            window.uppy = uppy;
+        });
+    </script>
 </body>
 
 </html>
